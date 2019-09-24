@@ -28,16 +28,13 @@
   <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
+        {% for error in form.email.errors %}
+            <p class="text-red">{{ error }}</p>
+        {% endfor %}
 
-      {% with message = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p class="login-box-msg text-red">sex</p>
-            {% endfor %}
-        {% endif %}
-      {% endwith %}
-
-
+        {% for error in form.password.errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
     <form action="/login/" method="post">
         {{ form.csrf_token }}
       <div class="form-group has-feedback">

@@ -19,7 +19,9 @@ def login():
         print("email:  {}, password: {}".format(email, password))
         print('SUCCESS')
         return redirect(url_for('index'))
+
+
+        # CHECK DB FOR ACCOUNT
     else:
-        flash('Input a valid account')
         print("FAIL")
     return render_template('login.html', form=form)
