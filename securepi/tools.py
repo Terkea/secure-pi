@@ -1,6 +1,7 @@
 import os
 import time
 import sys
+import bcrypt
 
 # Check if os is linux
 def linux_interaction():
@@ -37,3 +38,14 @@ def get_machine_storage():
             return ('n\\a')
     except:
         return ('n\\a')
+
+def encrypt(string):
+    salt = bcrypt.gensalt(rounds=8)
+    hash = bcrypt.hashpw(string.encode('utf-8'), salt)
+    return hash
+
+def check_hash(string, hash):
+    if bcrypt.checkpw(string.encode('utf-8'), hash):
+        return True
+    else:
+        return False
