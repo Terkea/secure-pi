@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d6c19e43-7c8f-4ca7-a862-602716eed584" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-    </list>
+    <list default="true" id="d6c19e43-7c8f-4ca7-a862-602716eed584" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +121,7 @@
       <workItem from="1569255782383" duration="2325000" />
       <workItem from="1569258129521" duration="2537000" />
       <workItem from="1569267060299" duration="1836000" />
-      <workItem from="1569303724069" duration="1537000" />
+      <workItem from="1569303724069" duration="1786000" />
     </task>
     <task id="LOCAL-00001" summary="real time cpu_temp, storage available">
       <created>1569304546047</created>
@@ -134,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569304546047</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="real time cpu_temp, storage available + login page">
+      <created>1569305509793</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1569305509793</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,7 +158,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="real time cpu_temp, storage available" />
-    <option name="LAST_COMMIT_MESSAGE" value="real time cpu_temp, storage available" />
+    <MESSAGE value="real time cpu_temp, storage available + login page" />
+    <option name="LAST_COMMIT_MESSAGE" value="real time cpu_temp, storage available + login page" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/secure_pi$Flask__app_py_.coverage" NAME="Flask (app.py) Coverage Results" MODIFIED="1569305459910" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
