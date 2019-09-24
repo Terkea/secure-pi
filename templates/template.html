@@ -110,9 +110,13 @@
           <i class="fa fa-circle text-success"></i> Sever online<br>
           <i class="fa fa-circle text-success"></i> CPU Temperature: <span>
             {% block cpu_temp %}
-                temp
+                {{temperature_value}}
             {% endblock %}</span><br>
-          <i class="fa fa-circle text-success"></i> Storage available:  50GB<br>
+          <i class="fa fa-circle text-success"></i> Storage available:
+            {% block memory %}
+                {{memory_available_value}}
+            {% endblock %}
+            <br>
         </div>
       </div>
 
