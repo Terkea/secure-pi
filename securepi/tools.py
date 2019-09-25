@@ -2,6 +2,11 @@ import os
 import time
 import sys
 import bcrypt
+import smtplib
+import json
+
+with open('config.json') as json_file:
+    CONFIG = json.load(json_file)
 
 # Check if os is linux
 def linux_interaction():
@@ -39,13 +44,47 @@ def get_machine_storage():
     except:
         return ('n\\a')
 
+
+#PASSWORD ENCRYPTION
 def encrypt(string):
     salt = bcrypt.gensalt(rounds=8)
     hash = bcrypt.hashpw(string.encode('utf-8'), salt)
     return hash
 
+#PASSWORD CHECK IF HASH CORESPONDS TO STRING
 def check_hash(string, hash):
     if bcrypt.checkpw(string.encode('utf-8'), hash):
         return True
     else:
         return False
+
+
+#check if credentials are working
+def test_email(server, port, username, password):
+    try:
+        server = smtplib.SMTP_SSL(server, port)
+        server.ehlo()
+        server.login(username, password)
+        return True
+    except:
+        return False
+    finally:
+        server.quit()
+
+def send_email(message):
+    try:
+        server = smtplib.SMTP_SSL(CONFIG['SMTP']['server'], CONFIG['SMTP']['port'])
+        server.ehlo()
+        server.login(CONFIG['SMTP']['username'], CONFIG['SMTP']['password'])
+
+        # CREATE THE EMAIL
+        message = """Secure-PI | {}
+        
+        
+        """.format(message)
+
+    except:
+        print('Couldn\'t send email')
+        return False
+    finally:
+        server.quit()

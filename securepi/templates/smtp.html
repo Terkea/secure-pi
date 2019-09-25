@@ -14,6 +14,11 @@
     <div class="tab-content">
       <div class="tab-pane active" id="tab_1">
 
+        {% for error in form.server.errors %}
+            <p class="text-red">{{ error }}</p> <a href='https://myaccount.google.com/lesssecureapps'>Click here to check</a>
+        {% endfor %}
+
+
             <form action="/smtp/" method="post">
                 {{ form.csrf_token }}
               <div class="box-body">

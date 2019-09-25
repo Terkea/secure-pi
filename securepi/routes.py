@@ -73,12 +73,17 @@ def smtp():
         server = str(form.server.data)
         port = str(form.port.data)
 
-        #TODO DO THE TEST THEN UPDATE THE CONFIGURATION
+        if tools.test_email(server, port, email, password):
+            CONFIG['SMTP']['server'] = server
+            CONFIG['SMTP']['port'] = port
+            CONFIG['SMTP']['username'] = email
+            CONFIG['SMTP']['password'] = password
 
-        print("email:  {}, password: {}, server: {}, port {}".format(email, password, server ,port))
-    else:
-        print('fail')
-
+            with open('config.json', 'w') as f:
+                f.write(json.dumps(CONFIG))
+                f.close()
+        else:
+            form.server.errors.append("Invalid account, be sure that you have less secure app access turned on or try with a gmail account")
 
     # print(json.dumps(CONFIG['SMTP']))
     return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form)
