@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d6c19e43-7c8f-4ca7-a862-602716eed584" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/securepi/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/securepi/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/securepi/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/securepi/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/securepi/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/securepi/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/securepi/templates/template.html" beforeDir="false" afterPath="$PROJECT_DIR$/securepi/templates/template.html" afterDir="false" />
     </list>
+    <list id="3db7ed42-de69-475b-ab8b-8572621e23b6" name="Revert &quot;config file&quot;" comment="Revert &quot;config file&quot;&#10;&#10;This reverts commit 64eda995" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,6 +120,7 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
         <env name="host " value=" '192.168.1.65', port = '5000'" />
       </envs>
       <option name="SDK_HOME" value="" />
@@ -159,6 +155,10 @@
       <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.run" />
+      <item itemvalue="Flask server.Flask (run.py)" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.run" />
@@ -172,12 +172,12 @@
           <expand>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4150ae63" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@aa2eebe7" type="7427dc5b:ServiceModel$ServiceGroupNode" />
             </path>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4150ae63" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@6b808a01" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@aa2eebe7" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@6e300db3" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
           </expand>
           <select />
@@ -262,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569356405158</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="smtp page almost done">
+      <created>1569382204419</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1569382204419</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -289,7 +296,8 @@
     <MESSAGE value="login form, half way done. VALIDATION DOESN'T WORK" />
     <MESSAGE value="login validation" />
     <MESSAGE value="login functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="login functionality" />
+    <MESSAGE value="smtp page almost done" />
+    <option name="LAST_COMMIT_MESSAGE" value="smtp page almost done" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/secure_pi$Flask__app_py_.coverage" NAME="Flask (app.py) Coverage Results" MODIFIED="1569309355912" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

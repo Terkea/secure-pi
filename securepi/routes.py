@@ -2,9 +2,13 @@ from flask import Flask, escape, request, render_template, redirect, url_for, se
 from securepi import app, tools
 from securepi.forms import LoginForm
 from securepi.models import User, Email, Picture, WhiteList
+import json
 
 TEMPERATURE = tools.measure_temp()
 MEMORY_AVAILABLE = tools.get_machine_storage()
+
+with open('config.json') as json_file:
+    CONFIG = json.load(json_file)
 
 @app.route('/')
 def index():
@@ -57,4 +61,6 @@ def login():
 
 @app.route('/smtp/', methods=['GET', 'POST'])
 def smtp():
-    return render_template('smtp.html')
+    query = Email.query.all()
+    print(type(query))
+    return render_template('smtp.html', config=CONFIG, query=query)
