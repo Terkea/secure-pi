@@ -125,13 +125,13 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">NAVIGATION</li>
         <!-- Optionally, you can add icons to the links -->
-        <li><a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-        <li><a href="#"><i class="fa fa-cloud"></i> <span>Control room</span></a></li>
-        <li><a href="#"><i class="fa fa-link"></i> <span>SMTP</span></a></li>
-        <li><a href="#"><i class="fa fa-sticky-note-o"></i> <span>Logs</span></a></li>
-        <li><a href="#"><i class="fa fa-check-square-o"></i> <span>White list</span></a></li>
-        <li><a href="#"><i class="fa fa-gear"></i> <span>Settings</span></a></li>
-          <li><a href="/logout"><i class="fa fa-gear"></i> <span>Logout</span></a></li>
+        <li id="dashboard"><a href="{{url_for('index')}}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+        <li><a href="{{url_for('index')}}"><i class="fa fa-cloud"></i> <span>Control room</span></a></li>
+        <li><a href="{{url_for('smtp')}}"><i class="fa fa-link"></i> <span>SMTP</span></a></li>
+        <li><a href="{{url_for('index')}}"><i class="fa fa-sticky-note-o"></i> <span>Logs</span></a></li>
+        <li><a href="{{url_for('index')}}"><i class="fa fa-check-square-o"></i> <span>White list</span></a></li>
+        <li><a href="{{url_for('index')}}"><i class="fa fa-gear"></i> <span>Settings</span></a></li>
+          <li><a href="{{url_for('logout')}}"><i class="fa fa-user-times"></i> <span>Logout</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>

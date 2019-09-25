@@ -42,10 +42,7 @@ def login():
             print('email found')
             if tools.check_hash(form.password.data, query.password):
                 print('password match with email')
-
                 session['email'] = form.email.data
-
-
                 return redirect(url_for('index'))
             else:
                 print('doesn\'t match')
@@ -57,3 +54,7 @@ def login():
     else:
         print("FAIL")
     return render_template('login.html', form=form)
+
+@app.route('/smtp/', methods=['GET', 'POST'])
+def smtp():
+    return render_template('smtp.html')
