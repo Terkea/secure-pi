@@ -1,4 +1,5 @@
 import os
+import ssl
 import time
 import sys
 import bcrypt
@@ -71,18 +72,26 @@ def test_email(server, port, username, password):
     finally:
         server.quit()
 
-def send_email(message):
+# TODO NOT TESTED YET, ALSO NEED TO CHECK IF IT WORKS WITH A LIST OF REVIECERS
+def send_email(message, subject):
     try:
-        server = smtplib.SMTP_SSL(CONFIG['SMTP']['server'], CONFIG['SMTP']['port'])
-        server.ehlo()
-        server.login(CONFIG['SMTP']['username'], CONFIG['SMTP']['password'])
-
         # CREATE THE EMAIL
-        message = """Secure-PI | {}
+        subject = "Secure-PI | {}".format(subject)
+        message = """
         
+        {}
         
         """.format(message)
+        to = ""
 
+
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(CONFIG['SMTP']['server'], CONFIG['SMTP']['port']) as server:
+            server.ehlo()
+            server.starttls(context=context)
+            server.ehlo()
+            server.login(CONFIG['SMTP']['username'], CONFIG['SMTP']['password'])
+            server.sendmail(CONFIG['SMTP']['username'], to, message)
     except:
         print('Couldn\'t send email')
         return False
