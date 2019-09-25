@@ -108,14 +108,8 @@
         <div class="pull-left info">
           <!-- Status -->
           <i class="fa fa-circle text-success"></i> Sever online<br>
-          <i class="fa fa-circle text-success"></i> CPU Temperature: <span>
-            {% block cpu_temp %}
-                {{temperature_value}}
-            {% endblock %}</span><br>
-          <i class="fa fa-circle text-success"></i> Storage available:
-            {% block memory %}
-                {{memory_available_value}}
-            {% endblock %}
+          <i class="fa fa-circle text-success"></i> CPU Temperature: <span>{{temperature_value}}</span><br>
+          <i class="fa fa-circle text-success"></i> Storage available:{{memory_available_value}}
             <br>
         </div>
       </div>

@@ -1,0 +1,87 @@
+{% extends 'template.html' %}
+
+{% block title %}
+    <title>Secure-PI   |    Dashboard</title>
+{% endblock %}
+
+{% block body_content %}
+  <!-- Custom Tabs -->
+  <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#tab_1" data-toggle="tab"><h4>Server settings</h4></a></li>
+      <li><a href="#tab_2" data-toggle="tab"><h4>Notification settings</h4></a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab_1">
+
+            <form action="/smtp/" method="post">
+                {{ form.csrf_token }}
+              <div class="box-body">
+                <div class="form-group">
+                  <h4>Server: </h4>
+                    {{ form.server(class='form-control', value=config['server'] ) }}
+                </div>
+                <div class="form-group">
+                  <h4>Email</h4>
+                    {{ form.email(class='form-control', value=config['username'] ) }}
+                </div>
+                  <div class="form-group">
+                  <h4>Password</h4>
+                      {{ form.password(class='form-control', type='password', value=config['password'] ) }}
+                </div>
+                  <div class="form-group">
+                  <h4>Port</h4>
+                      {{ form.port(class='form-control', value=config['port'] ) }}
+                </div>
+              </div>
+
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="submit" class="btn btn-danger btn-block">Test & Update</button>
+              </div>
+            </form>
+      </div>
+      <!-- /.tab-pane -->
+      <div class="tab-pane" id="tab_2">
+
+          <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th>ID</th>
+                  <th>email</th>
+                  <th>notifications</th>
+                    <th>edit</th>
+                </tr>
+                {% for foo in query %}
+                    <tr>
+                      <td>{{ foo.id }}</td>
+                      <td>{{ foo.email }}</td>
+{#                        <td> {{ foo.notification }}</td>#}
+                        {% if foo.notification == false %}
+                            <td><span class="label label-success">da</span></td>
+                        {% else %}
+                            <td><span class="label label-danger">nu</span></td>
+                        {% endif %}
+                        <td>turn on/off notifications</td>
+                    </tr>
+                {% endfor %}
+
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+      </div>
+    </div>
+    <!-- /.tab-content -->
+  </div>
+  <!-- nav-tabs-custom -->
+
+{% endblock %}
+

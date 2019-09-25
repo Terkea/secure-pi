@@ -1,14 +1,17 @@
 from flask import Flask, escape, request, render_template, redirect, url_for, session
 from securepi import app, tools
-from securepi.forms import LoginForm
+from securepi.forms import LoginForm, UpdateEmailForm
 from securepi.models import User, Email, Picture, WhiteList
 import json
 
+
+#CONSTANTS
 TEMPERATURE = tools.measure_temp()
 MEMORY_AVAILABLE = tools.get_machine_storage()
-
 with open('config.json') as json_file:
     CONFIG = json.load(json_file)
+
+
 
 @app.route('/')
 def index():
@@ -61,6 +64,21 @@ def login():
 
 @app.route('/smtp/', methods=['GET', 'POST'])
 def smtp():
+    form = UpdateEmailForm()
     query = Email.query.all()
-    print(type(query))
-    return render_template('smtp.html', config=CONFIG, query=query)
+
+    if  form.validate_on_submit():
+        email = str(form.email.data)
+        password = str(form.password.data)
+        server = str(form.server.data)
+        port = str(form.port.data)
+
+        #TODO DO THE TEST THEN UPDATE THE CONFIGURATION
+
+        print("email:  {}, password: {}, server: {}, port {}".format(email, password, server ,port))
+    else:
+        print('fail')
+
+
+    # print(json.dumps(CONFIG['SMTP']))
+    return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form)
