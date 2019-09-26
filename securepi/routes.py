@@ -60,11 +60,11 @@ def login():
 
 @app.route('/smtp/', methods=['GET', 'POST'])
 def smtp():
-    form = UpdateSMTPForm()
-    form2 = UpdateEmailAddress()
+    form = UpdateSMTPForm(request.form)
+    form2 = UpdateEmailAddress(request.form)
     query = Email.query.all()
 
-    if  form.validate_on_submit():
+    if "form-submit" in request.form and form.validate_on_submit():
         email = str(form.email.data)
         password = str(form.password.data)
         server = str(form.server.data)
@@ -80,11 +80,14 @@ def smtp():
                 f.write(json.dumps(CONFIG))
                 f.close()
         else:
-            form.server.errors.append("Invalid account, be sure that you have less secure app access turned on or try with a gmail account")
+            form.server.errors.append(
+                "Invalid account, be sure that you have less secure app access turned on or try with a gmail account")
 
-
-    if form2.validate_on_submit():
-        print('form2 email updated {}'.format(form2.email))
+    if "form2-submit" in request.form and form2.validate_on_submit():
+        query = Email.query.get(str(form2.id.data))
+        query.email = str(form2.email_update.data)
+        db.session.commit()
+        query = Email.query.all()
     else:
         print('cannot validate the second form')
 
@@ -116,19 +119,3 @@ def change_notification_status(id):
             return redirect(url_for('smtp'))
     except:
         return 'There was a problem changing the notification status on that email'
-
-@app.route('/update_email_address/<int:id>', methods=['GET', 'POST'])
-def update_email_address(id):
-    query = Email.query.get_or_404(id)
-    form2 = UpdateEmailAddress()
-
-    if form2.validate_on_submit():
-        try:
-            print(form2.email)
-            query.email = form2.email.update_email_address
-            db.session.commit()
-        except:
-            return 'There was a problem changing the notification status on that email'
-    else:
-        print('couldn\'t validate the form')
-    return render_template(url_for('smtp'))
