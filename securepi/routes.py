@@ -1,6 +1,6 @@
 from flask import Flask, escape, request, render_template, redirect, url_for, session
 from securepi import app, tools, db
-from securepi.forms import LoginForm, UpdateSMTPForm, UpdateEmailAddress
+from securepi.forms import LoginForm, UpdateSMTPForm, UpdateEmailAddress, AddNewEmail
 from securepi.models import User, Email, Picture, WhiteList
 import json
 
@@ -62,6 +62,7 @@ def login():
 def smtp():
     form = UpdateSMTPForm(request.form)
     form2 = UpdateEmailAddress(request.form)
+    form3 = AddNewEmail(request.form)
     query = Email.query.all()
 
     if "form-submit" in request.form and form.validate_on_submit():
@@ -91,7 +92,19 @@ def smtp():
     else:
         print('cannot validate the second form')
 
-    return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form, form2=form2)
+
+    #todo check if the email is unique
+    if "form3-submit" in request.form and form3.validate_on_submit():
+        email = str(form3.email.data)
+        newemail = Email(email=email, notifications=True)
+
+        db.session.add(newemail)
+        db.session.commit()
+        query = Email.query.all()
+    else:
+        print('cannot validate the third form')
+
+    return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form, form2=form2, form3=form3)
 
 @app.route('/delete_email/<int:id>', methods=['GET', 'POST'])
 def delete_email(id):

@@ -18,3 +18,6 @@ class UpdateSMTPForm(FlaskForm):
 class UpdateEmailAddress(FlaskForm):
     email_update = StringField('Email Address', validators=[DataRequired(message='Field required'), Email()])
     id = StringField('ID', validators=[DataRequired(message='Field required')])
+
+class AddNewEmail(FlaskForm):
+    email = StringField('Email Address', validators=[DataRequired(message='Field required'), Email()])
