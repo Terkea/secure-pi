@@ -6,6 +6,8 @@ import bcrypt
 import smtplib
 import json
 
+from securepi.models import Email
+
 with open('config.json') as json_file:
     CONFIG = json.load(json_file)
 
@@ -76,22 +78,19 @@ def test_email(server, port, username, password):
 def send_email(message, subject):
     try:
         # CREATE THE EMAIL
-        subject = "Secure-PI | {}".format(subject)
-        message = """
-        
-        {}
-        
-        """.format(message)
-        to = ""
+        message = 'Subject: Secure-pi | {}\n\n{}'.format(subject, message)
 
-
+        query = Email.query.filter_by(notifications=True).all()
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(CONFIG['SMTP']['server'], CONFIG['SMTP']['port']) as server:
-            server.ehlo()
-            server.starttls(context=context)
-            server.ehlo()
-            server.login(CONFIG['SMTP']['username'], CONFIG['SMTP']['password'])
-            server.sendmail(CONFIG['SMTP']['username'], to, message)
+
+        server = smtplib.SMTP_SSL(CONFIG['SMTP']['server'], CONFIG['SMTP']['port'])
+        server.ehlo()
+        server.login(CONFIG['SMTP']['username'], CONFIG['SMTP']['password'])
+
+        for email in query:
+            server.sendmail(CONFIG['SMTP']['username'], email.email, message)
+            print(email)
+            print('mail send succesfully')
     except:
         print('Couldn\'t send email')
         return False
