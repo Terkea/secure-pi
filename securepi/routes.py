@@ -89,9 +89,6 @@ def smtp():
         query.email = str(form2.email_update.data)
         db.session.commit()
         query = Email.query.all()
-    else:
-        print('cannot validate the second form')
-
 
     #todo check if the email is unique
     if "form3-submit" in request.form and form3.validate_on_submit():
@@ -101,10 +98,8 @@ def smtp():
         db.session.add(newemail)
         db.session.commit()
         query = Email.query.all()
-    else:
-        print('cannot validate the third form')
 
-    return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form, form2=form2, form3=form3)
+    return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form, form2=form2, form3=form3, temperature_value = TEMPERATURE, memory_available_value = MEMORY_AVAILABLE)
 
 @app.route('/delete_email/<int:id>', methods=['GET', 'POST'])
 def delete_email(id):
@@ -116,6 +111,7 @@ def delete_email(id):
         return redirect(url_for('smtp'))
     except:
         return 'There was a problem deleting that email'
+
 
 @app.route('/change_notification_status/<int:id>', methods=['GET', 'POST'])
 def change_notification_status(id):
@@ -132,3 +128,8 @@ def change_notification_status(id):
             return redirect(url_for('smtp'))
     except:
         return 'There was a problem changing the notification status on that email'
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
+    return render_template('settings.html', config=CONFIG["NETWORK"], temperature_value = TEMPERATURE, memory_available_value = MEMORY_AVAILABLE)
