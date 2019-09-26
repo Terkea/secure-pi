@@ -15,7 +15,13 @@
       <div class="tab-pane active" id="tab_1">
 
         {% for error in form.server.errors %}
-            <p class="text-red">{{ error }}</p> <a href='https://myaccount.google.com/lesssecureapps'>Click here to check</a>
+{#            <p class="text-red">{{ error }}</p>#}
+            {% if error == 'Invalid account, be sure that you have less secure app access turned on or try with a gmail account' %}
+                <p class="text-red">{{ error }}</p>
+                <a href='https://myaccount.google.com/lesssecureapps'>Click here to check</a>
+            {% else: %}
+                <p class="text-red">{{ error }}</p>
+            {% endif %}
         {% endfor %}
 
 
@@ -57,21 +63,70 @@
               <table class="table table-hover">
                 <tr>
                   <th>ID</th>
-                  <th>email</th>
-                  <th>notifications</th>
-                    <th>edit</th>
+                  <th>EMAIL</th>
+                  <th>NOTIFICATIONS</th>
+                    <th>ACTIONS</th>
                 </tr>
                 {% for foo in query %}
                     <tr>
                       <td>{{ foo.id }}</td>
                       <td>{{ foo.email }}</td>
 {#                        <td> {{ foo.notification }}</td>#}
-                        {% if foo.notification == false %}
-                            <td><span class="label label-success">da</span></td>
-                        {% else %}
-                            <td><span class="label label-danger">nu</span></td>
+                        {% if foo.notifications == False %}
+                            <td><span class="label label-danger">OFF</span></td>
+                            <td>
+                                <a href="/change_notification_status/{{ foo.id }}">
+                                    <button class="btn btn-sm btn-default">turn off notifications</button>
+                                </a>
+                                <a href="">
+                                    <button class="btn btn-sm btn-default">update</button>
+                                </a>
+                                <a href="/delete_email/{{ foo.id }}">
+                                    <button class="btn btn-sm btn-default">delete</button>
+                                </a>
+                            </td>
                         {% endif %}
-                        <td>turn on/off notifications</td>
+                        {% if foo.notifications == True %}
+                            <td><span class="label label-success">ON</span></td>
+                            <td>
+                                <a href="/change_notification_status/{{ foo.id }}">
+                                    <button class="btn btn-sm btn-default">turn off notifications</button>
+                                </a>
+                                <a href="" data-toggle="modal" data-target="#modal-default">
+                                    <button class="btn btn-sm btn-default" >update</button>
+                                </a>
+                                    <div class="modal fade" id="modal-default">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">Update the email address</h4>
+                                          </div>
+                                            <form action="/smtp/" method="post">
+                                              <div class="modal-body">
+                                                  <div class="form-group">
+                                                      {{ form2.email(class='form-control', value=foo.email ) }}
+                                                  </div>
+                                              </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-danger">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                    <!-- /.modal -->
+                                <a href="/delete_email/{{ foo.id }}">
+                                    <button class="btn btn-sm btn-default">delete</button>
+                                </a>
+                            </td>
+                        {% endif %}
+
                     </tr>
                 {% endfor %}
 
