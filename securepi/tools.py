@@ -114,6 +114,23 @@ def get_hostname():
     return hostname
 
 def update_config():
-    if  CONFIG['NETWORK']['public_ip'] != get_public_ip() or CONFIG['NETWORK']['IPv4_address'] != get_ipv4() or CONFIG['NETWORK']['hostname'] != get_hostname():
-        #todo update config file
-        pass
+    if CONFIG['NETWORK']['public_ip'] != get_public_ip():
+        send_email("""It looks like your IPS just changed your IP address \n
+        Don't worry, we got you :D \n
+        The new IP address is {}:{}""".format(get_public_ip()), CONFIG['NETWORK']["running_port"], "DHCP Notification")
+        CONFIG['NETWORK']['public_ip'] = get_public_ip()
+        with open('config.json', 'w') as f:
+            f.write(json.dumps(CONFIG))
+            f.close()
+
+    if CONFIG['NETWORK']['IPv4_address'] != get_ipv4():
+        CONFIG['NETWORK']['IPv4_address'] = get_ipv4()
+        with open('config.json', 'w') as f:
+            f.write(json.dumps(CONFIG))
+            f.close()
+
+    if CONFIG['NETWORK']['hostname'] != get_hostname():
+        CONFIG['NETWORK']['hostname'] = get_hostname()
+        with open('config.json', 'w') as f:
+            f.write(json.dumps(CONFIG))
+            f.close()
