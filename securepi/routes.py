@@ -132,5 +132,6 @@ def change_notification_status(id):
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
+    print(tools.get_hostname())
     # todo gotta check the configuration before rendering the view
-    return render_template('settings.html', config=CONFIG["NETWORK"], temperature_value = TEMPERATURE, memory_available_value = MEMORY_AVAILABLE)
+    return render_template('settings.html', config=CONFIG, temperature_value = TEMPERATURE, memory_available_value = MEMORY_AVAILABLE)

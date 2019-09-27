@@ -7,140 +7,93 @@
 {% block body_content %}
       <div class="row">
         <div class="col-md-12">
-          <!-- Custom Tabs -->
-          <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab"><h4>Network</h4></a></li>
-              <li><a href="#tab_2" data-toggle="tab"><h4>System</h4></a></li>
-              <li><a href="#tab_3" data-toggle="tab">Tab 3</a></li>
-            </ul>
-            <div class="tab-content">
-
-              <div class="tab-pane active" id="tab_1">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="box">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Network information</h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-striped table-bordered dt-responsive nowrap">
-                                            <tbody>
-                                            <tr>
-                                                <th scope="row">Ethernet Interface:</th>
-                                                <td>{{ config['ethernet_interface'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">IPv4 address:</th>
-                                                <td>{{ config['IPv4_address'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">IPv6 address:</th>
-                                                <td>{{ config['IPv6_address'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Public ip:</th>
-                                                <td>{{ config['public_ip'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Hostname:</th>
-                                                <td>{{ config['hostname'] }}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">System information</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-striped table-bordered dt-responsive nowrap">
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">Public ip:</th>
+                                            <td>{{ config["NETWORK"]['public_ip'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">IPv4 address:</th>
+                                            <td>{{ config["NETWORK"]['IPv4_address'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Hostname:</th>
+                                            <td>{{ config["NETWORK"]['hostname'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Picture resolution</th>
+                                            <td>
+                                            <div class="form-group">
+                                              <select class="form-control">
+                                                <option>{{ config['SETTINGS']["picture_resolution"] }}</option>
+                                                <option>option 2</option>
+                                                <option>option 3</option>
+                                                <option>option 4</option>
+                                                <option>option 5</option>
+                                              </select>
+                                            </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Brightness:</th>
+                                            <td><input type="text" class="form-control" value="{{ config['SETTINGS']['brightness'] }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Contrast:</th>
+                                            <td><input type="text" class="form-control" value="{{ config['SETTINGS']['contrast'] }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Saturation:</th>
+                                            <td><input type="text" class="form-control" value="{{ config['SETTINGS']['saturation'] }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">How often to take pictures (in seconds):</th>
+                                            <td><input type="text" class="form-control" value="{{ config['SETTINGS']["how_often_to_take_pictures"] }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">DHCP Notifications:</th>
+                                            <td>
+                                                <select class="form-control">
+                                                <option>{{ config['SETTINGS']["DHCP_notifications"] }}</option>
+                                                <option>option 2</option>
+                                                <option>option 3</option>
+                                                <option>option 4</option>
+                                                <option>option 5</option>
+                                              </select></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Border color:</th>
+                                            <td><input type="text" class="form-control" value="{{ config['SETTINGS']["border_color"] }}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Store location:</th>
+                                            <td>{{ config['SETTINGS']['store_location'] }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
+                            <a href="#">
+                                <button class="btn btn-danger btn-block">UPDATE</button>
+                            </a>
                         </div>
                     </div>
-
                 </div>
-              </div>
-
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="tab_2">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="box">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Network information</h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-striped table-bordered dt-responsive nowrap">
-                                            <tbody>
-                                            <tr>
-                                                <th scope="row">Picture resolution</th>
-                                                <td>{{ config['ethernet_interface'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Brightness:</th>
-                                                <td>{{ config['IPv4_address'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Contrast:</th>
-                                                <td>{{ config['IPv6_address'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Saturation:</th>
-                                                <td>{{ config['public_ip'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">How often to take pictures:</th>
-                                                <td>{{ config['hostname'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">DHCP Notifications:</th>
-                                                <td>{{ config['hostname'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Text overlay:</th>
-                                                <td>{{ config['hostname'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Border color:</th>
-                                                <td>{{ config['hostname'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Store location:</th>
-                                                <td>{{ config['hostname'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Limit before email notification:</th>
-                                                <td>{{ config['hostname'] }}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="btn btn-block btn-danger"> UPDATE </button>
-                        </div>
-                    </div>
-
-                </div>
-              </div>
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="tab_3">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                It has survived not only five centuries, but also the leap into electronic typesetting,
-                remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-                sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                like Aldus PageMaker including versions of Lorem Ipsum.
-              </div>
-              <!-- /.tab-pane -->
             </div>
-            <!-- /.tab-content -->
-          </div>
-          <!-- nav-tabs-custom -->
-        </div>
-        <!-- /.col -->
-      </div>
+
+
+
 
 
 {% endblock %}

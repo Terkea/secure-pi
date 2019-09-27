@@ -1,10 +1,13 @@
 import os
 import ssl
-import time
 import sys
+import urllib
+from urllib import request
 import bcrypt
 import smtplib
 import json
+import socket
+
 
 from securepi.models import Email
 
@@ -96,3 +99,21 @@ def send_email(message, subject):
         return False
     finally:
         server.quit()
+        
+def get_public_ip():
+    ip = urllib.request.urlopen('http://checkip.amazonaws.com/')
+    return ip.read().decode("utf-8")
+
+def get_ipv4():
+    hostname = socket.gethostname()
+    IPv4_Addr = socket.gethostbyname(hostname)
+    return IPv4_Addr
+
+def get_hostname():
+    hostname = socket.gethostname()
+    return hostname
+
+def update_config():
+    if  CONFIG['NETWORK']['public_ip'] != get_public_ip() or CONFIG['NETWORK']['IPv4_address'] != get_ipv4() or CONFIG['NETWORK']['hostname'] != get_hostname():
+        #todo update config file
+        pass
