@@ -1,21 +1,20 @@
 from flask import Flask, escape, request, render_template, redirect, url_for, session
 from securepi import app, tools, db
-from securepi.forms import LoginForm, UpdateSMTPForm, UpdateEmailAddress, AddNewEmail
-from securepi.models import User, Email, Picture, WhiteList
+from securepi.forms import LoginForm, UpdateSMTPForm, UpdateEmailAddress, AddNewEmail, SettingsForm
+from securepi.models import User, Email, Picture
 import json
 
-
-#CONSTANTS
+# CONSTANTS
 TEMPERATURE = tools.measure_temp()
 MEMORY_AVAILABLE = tools.get_machine_storage()
 with open('config.json') as json_file:
     CONFIG = json.load(json_file)
 
 
-
 @app.route('/')
 def index():
-    return render_template('index.html', temperature_value = TEMPERATURE, memory_available_value = MEMORY_AVAILABLE)
+    return render_template('index.html', temperature_value=TEMPERATURE, memory_available_value=MEMORY_AVAILABLE)
+
 
 @app.route('/logout')
 def logout():
@@ -29,6 +28,7 @@ def require_login():
     allowed_routes = ['login']
     if request.endpoint not in allowed_routes and 'email' not in session:
         return redirect(url_for('login'))
+
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -57,6 +57,7 @@ def login():
     else:
         print("FAIL")
     return render_template('login.html', form=form)
+
 
 @app.route('/smtp/', methods=['GET', 'POST'])
 def smtp():
@@ -90,7 +91,7 @@ def smtp():
         db.session.commit()
         query = Email.query.all()
 
-    #todo check if the email is unique
+    # todo check if the email is unique
     if "form3-submit" in request.form and form3.validate_on_submit():
         email = str(form3.email.data)
         newemail = Email(email=email, notifications=True)
@@ -99,7 +100,9 @@ def smtp():
         db.session.commit()
         query = Email.query.all()
 
-    return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form, form2=form2, form3=form3, temperature_value = TEMPERATURE, memory_available_value = MEMORY_AVAILABLE)
+    return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form, form2=form2, form3=form3,
+                           temperature_value=TEMPERATURE, memory_available_value=MEMORY_AVAILABLE)
+
 
 @app.route('/delete_email/<int:id>', methods=['GET', 'POST'])
 def delete_email(id):
@@ -130,8 +133,27 @@ def change_notification_status(id):
         return 'There was a problem changing the notification status on that email'
 
 
-@app.route('/settings', methods=['GET', 'POST'])
+@app.route('/settings/', methods=['GET', 'POST'])
 def settings():
-    print(tools.get_hostname())
-    # todo gotta check the configuration before rendering the view
-    return render_template('settings.html', config=CONFIG, temperature_value = TEMPERATURE, memory_available_value = MEMORY_AVAILABLE)
+    form = SettingsForm()
+
+    if form.validate_on_submit():
+        CONFIG['SETTINGS']['picture_resolution'] = str(form.picture_resolution.data)
+        CONFIG['SETTINGS']['brightness'] = str(form.brightness.data)
+        CONFIG['SETTINGS']['contrast'] = str(form.contrast.data)
+        CONFIG['SETTINGS']['saturation'] = str(form.saturation.data)
+        CONFIG['SETTINGS']['how_often_to_take_pictures'] = str(form.how_often_to_take_pictures.data)
+        CONFIG['SETTINGS']['border_color'] = str(form.border_color.data)
+        CONFIG['SETTINGS']['store_location'] = str(form.store_location.data)
+
+        print('FILE UPDATED')
+
+        with open('config.json', 'w') as f:
+            f.write(json.dumps(CONFIG))
+            f.close()
+
+    else:
+        print('FAIL')
+
+    return render_template('settings.html', config=CONFIG, temperature_value=TEMPERATURE,
+                           memory_available_value=MEMORY_AVAILABLE, form=form)
