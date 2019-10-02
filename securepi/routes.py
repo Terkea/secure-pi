@@ -157,3 +157,9 @@ def settings():
 
     return render_template('settings.html', config=CONFIG, temperature_value=TEMPERATURE,
                            memory_available_value=MEMORY_AVAILABLE, form=form)
+
+
+@app.route('/live_view/', methods=['GET', 'POST'])
+def live_view():
+    return render_template('live_view.html', temperature_value=TEMPERATURE,
+                    memory_available_value=MEMORY_AVAILABLE, video="/static/video/haha.mp4")
