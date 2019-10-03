@@ -1,8 +1,9 @@
-from flask import Flask, escape, request, render_template, redirect, url_for, session
+from flask import Flask, escape, request, render_template, redirect, url_for, session, Response
 from securepi import app, tools, db
 from securepi.forms import LoginForm, UpdateSMTPForm, UpdateEmailAddress, AddNewEmail, SettingsForm
 from securepi.models import User, Email, Picture
 import json
+import cv2
 
 # CONSTANTS
 TEMPERATURE = tools.measure_temp()
@@ -162,4 +163,4 @@ def settings():
 @app.route('/live_view/', methods=['GET', 'POST'])
 def live_view():
     return render_template('live_view.html', temperature_value=TEMPERATURE,
-                    memory_available_value=MEMORY_AVAILABLE, video="/static/video/haha.mp4")
+                    memory_available_value=MEMORY_AVAILABLE)

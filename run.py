@@ -1,19 +1,54 @@
 import json
 from datetime import datetime
 from threading import Timer
-
+import cv2
+import sys
+import time
+import threading
+import numpy as np
+from picamera import PiCamera
+from camera import VideoCamera
 from securepi import app, tools
+from flask import Response
 
-x = datetime.today()
-y = x.replace(day=x.day + 1, hour=1, minute=0, second=0, microsecond=0)
-delta_t = y - x
+PROFILE_FACE = cv2.CascadeClassifier('haarcascades/haarcascade_profileface.xml')
+FRONTAL_FACE = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
+UPPER_BODY = cv2.CascadeClassifier('haarcascades/haarcascade_upperbody.xml')
+FULL_BODY = cv2.CascadeClassifier('haarcascades/haarcascade_fullbody.xml')
 
-secs = delta_t.seconds + 1
+OBJECT_CLASSIFIERS = [PROFILE_FACE, FRONTAL_FACE, UPPER_BODY, FULL_BODY]
+
+UPDATE_INTERVAL = 10 # only once in this time interval
+VIDEO_CAMERA = VideoCamera(flip=False) # creates a camera object, flip vertically
+COUNTER = 0
+
+def check_for_objects():
+    global COUNTER
+    while True:
+        try:
+            for object_classifier in OBJECT_CLASSIFIERS:
+                frame, found_obj = VIDEO_CAMERA.check_for_object(object_classifier)
+                if found_obj and (time.time() - COUNTER) > UPDATE_INTERVAL:
+                    COUNTER = time.time()
+                    print("OBJECT DETECTED")
+        except:
+            print("Error: ", sys.exc_info()[0])
+
+
+def gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(VIDEO_CAMERA),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
-    with open('config.json', 'r') as json_file:
-        data = json.load(json_file)
-    app.run(host=data['NETWORK']['IPv4_address'], port=data['NETWORK']['running_port'], debug=True)
-
-    t = Timer(secs, tools.update_config())
+    t = threading.Thread(target=check_for_objects, args=())
+    t.daemon = True
     t.start()
+    app.run(host='0.0.0.0', debug=False)
+
