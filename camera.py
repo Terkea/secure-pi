@@ -6,7 +6,7 @@ import numpy as np
 
 class VideoCamera(object):
     def __init__(self, flip = False):
-        self.vs = PiVideoStream().start()
+        self.vs = PiVideoStream(resolution = (1920, 1080)).start()
         self.flip = flip
         time.sleep(2.0)
 
@@ -22,6 +22,10 @@ class VideoCamera(object):
         frame = self.flip_if_needed(self.vs.read())
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tobytes()
+
+    def get_image(self, path_name):
+    	frame = self.flip_if_needed(self.vs.read()).copy()
+    	cv2.imwrite(path_name + ".jpg", frame)
 
     def check_for_object(self, classifier):
         found_objects = False

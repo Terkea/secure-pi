@@ -31,6 +31,7 @@ def check_for_objects():
                 if found_obj and (time.time() - COUNTER) > UPDATE_INTERVAL:
                     COUNTER = time.time()
                     print("OBJECT DETECTED")
+                    # VIDEO_CAMERA.get_image()
         except:
             print("Error: ", sys.exc_info()[0])
 
