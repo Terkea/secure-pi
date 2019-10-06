@@ -1,11 +1,11 @@
 import json
-from datetime import datetime
-from threading import Timer
 import cv2
 import sys
 import time
 import threading
 import numpy as np
+from datetime import datetime
+from threading import Timer
 from picamera import PiCamera
 from camera import VideoCamera
 from securepi import app, tools
@@ -25,15 +25,16 @@ COUNTER = 0
 def check_for_objects():
     global COUNTER
     while True:
-        try:
-            for object_classifier in OBJECT_CLASSIFIERS:
-                frame, found_obj = VIDEO_CAMERA.check_for_object(object_classifier)
-                if found_obj and (time.time() - COUNTER) > UPDATE_INTERVAL:
-                    COUNTER = time.time()
-                    print("OBJECT DETECTED")
+        # try:
+        for object_classifier in OBJECT_CLASSIFIERS:
+            frame, found_obj = VIDEO_CAMERA.check_for_object(object_classifier)
+            if found_obj and (time.time() - COUNTER) > UPDATE_INTERVAL:
+                COUNTER = time.time()
+                now = datetime.now()
+                print("{} OBJECT DETECTED".format(now.strftime("%d/%m/%Y_%H:%M:%S")))
                     # VIDEO_CAMERA.get_image()
-        except:
-            print("Error: ", sys.exc_info()[0])
+        # except:
+        #     print("Error: ", sys.exc_info()[0])
 
 
 def gen(camera):
