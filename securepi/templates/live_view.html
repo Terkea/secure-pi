@@ -5,22 +5,62 @@
 {% endblock %}
 
 {% block body_content %}
-
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
     <div class="row">
         <div class="col-md-12">
 
-            <div class="embed-responsive embed-responsive-16by9">
-                <img class="embed-responsive-item" src="{{ url_for('video_feed') }}"></iframe>
+            <div class="videoplayer embed-responsive embed-responsive-16by9" id="video">
+                <img class="embed-responsive-item" src="{{ url_for('video_feed') }}" >
+                <div class="overlay">
+                    <a href="#" id="fullscreen">fullscreen</a><br>
+                </div>
             </div>
-                <!-- <img class="embed-responsive-item" src="{{ url_for('video_feed') }}"></iframe> -->
+                
             <div class="box">
                 <div class="box-content">
 
                 </div>
             </div>
-
         </div>
     </div>
+
+<script>
+var elem = document.getElementById("video");
+var fullscreen = document.getElementById("fullscreen");
+var closefullscreen = document.getElementById("close_fullscreen")
+
+fullscreen.addEventListener('click', function(){
+    if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+    elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+    elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+    elem.msRequestFullscreen();
+    }
+
+    if(screen.orientation.type === "portrait-primary"){
+      console.log('muie');
+      screen.orientation.lock("landscape")
+    }else{
+      console.log("e bine");
+    }
+})
+
+closefullscreen.addEventListener('click', function(){
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.mozCancelFullScreen) { /* Firefox */
+    document.mozCancelFullScreen();
+  } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) { /* IE/Edge */
+    document.msExitFullscreen();
+    }
+})
+</script>
+
 
 
 {% endblock %}

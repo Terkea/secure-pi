@@ -59,7 +59,7 @@ def encrypt(string):
 
 #PASSWORD CHECK IF HASH CORESPONDS TO STRING
 def check_hash(string, hash):
-    if bcrypt.checkpw(string.encode('utf-8'), hash):
+    if bcrypt.checkpw(string.encode('utf-8'), hash.encode('utf-8')):
         return True
     else:
         return False

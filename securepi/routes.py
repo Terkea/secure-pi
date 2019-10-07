@@ -1,7 +1,7 @@
 from flask import Flask, escape, request, render_template, redirect, url_for, session, Response
 from securepi import app, tools, db
 from securepi.forms import LoginForm, UpdateSMTPForm, UpdateEmailAddress, AddNewEmail, SettingsForm
-from securepi.models import User, Email, Picture
+from securepi.models import User, Email, Records
 import json
 import cv2
 
