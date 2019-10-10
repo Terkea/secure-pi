@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import json
 import cv2
 import sys
@@ -10,6 +12,8 @@ from picamera import PiCamera
 from securepi import app, tools
 from securepi.camera import VideoCamera
 from flask import Response
+from securepi.models import User, Email, Records
+from securepi import db
 
 
 PROFILE_FACE = cv2.CascadeClassifier('haarcascades/haarcascade_profileface.xml')
@@ -27,13 +31,21 @@ def check_for_objects():
     global COUNTER
     while True:
         try:
-            for object_classifier in OBJECT_CLASSIFIERS:
-                frame, found_obj = VIDEO_CAMERA.check_for_object(object_classifier)
-                if found_obj and (time.time() - COUNTER) > UPDATE_INTERVAL:
-                    COUNTER = time.time()
-                    now = datetime.now()
-                    print("{} OBJECT DETECTED".format(now.strftime("%d/%m/%Y_%H:%M:%S")))
-                    VIDEO_CAMERA.get_image()
+	        for object_classifier in OBJECT_CLASSIFIERS:
+	            frame, found_obj = VIDEO_CAMERA.check_for_object(object_classifier)
+	            if found_obj and (time.time() - COUNTER) > UPDATE_INTERVAL:
+	                COUNTER = time.time()
+	                now = datetime.now()
+	                print("{} OBJECT DETECTED".format(now.strftime("%d/%m/%Y_%H:%M:%S")))
+	                # write to file
+	                f = open('securepi/static/records/{}.jpg'.format(now.strftime("%d-%m-%Y_%H:%M:%S")), 'wb')
+	                f.write(bytearray(frame))
+	                f.close()
+
+	                #update database
+	                new_record = Records(created_at = now.strftime("%d/%m/%Y %H:%M:%S"), file_type = "picture", path_filename = "{}.jpg".format(now.strftime("%d-%m-%Y_%H:%M:%S")))
+	                db.session.add(new_record)
+	                db.session.commit()
         except:
             print("Error: ", sys.exc_info()[0])
 
@@ -53,5 +65,8 @@ if __name__ == '__main__':
     t = threading.Thread(target=check_for_objects, args=())
     t.daemon = True
     t.start()
+
+    #TODO CHECK EVERY ONCE AN HOUR IF THE IP ADDRESS IS THE SAME OR SEND MAIL WITH NEW ONE
+
     app.run(host='0.0.0.0', debug=False)
 

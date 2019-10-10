@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, IntegerField
 from wtforms.validators import DataRequired, Email
