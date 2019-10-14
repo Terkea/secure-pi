@@ -23,7 +23,7 @@ FULL_BODY = cv2.CascadeClassifier('haarcascades/haarcascade_fullbody.xml')
 
 OBJECT_CLASSIFIERS = [PROFILE_FACE, FRONTAL_FACE, UPPER_BODY, FULL_BODY]
 
-UPDATE_INTERVAL = 50 # only once in this time interval
+UPDATE_INTERVAL = 5 # only once in this time interval
 VIDEO_CAMERA = VideoCamera(flip=False) # creates a camera object, flip vertically
 COUNTER = 0
 

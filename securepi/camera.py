@@ -35,7 +35,7 @@ class VideoCamera(object):
 
         objects = classifier.detectMultiScale(
             gray,
-            scaleFactor=1.1,
+            scaleFactor=1.5,
             minNeighbors=5,
             minSize=(30, 30),
             flags=cv2.CASCADE_SCALE_IMAGE

@@ -173,11 +173,11 @@ def records():
 
 @app.route("/load", methods=['GET', 'POST'])
 def load():
-    db = [i.serialize for i in Records.query.order_by(Records.id).all()]  #DATABASE
+    db = [i.serialize for i in Records.query.order_by(Records.id.desc()).all()]  #DATABASE
     posts = len(db)  # num posts to generate
-    quantity = 20  # num posts to return per request
+    quantity = 21  # num posts to return per request
 
-    time.sleep(0.2)  # Used to simulate delay
+    # time.sleep(0.2)  # Used to simulate delay
     
     if request.args:
         counter = int(request.args.get("c"))  # The 'counter' value sent in the QS
