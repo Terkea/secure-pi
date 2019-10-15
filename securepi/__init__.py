@@ -14,3 +14,4 @@ jsglue.init_app(app)
 db = SQLAlchemy(app)
 
 from securepi import routes
+from securepi import DetectorAPI

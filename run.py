@@ -10,45 +10,45 @@ from datetime import datetime
 from threading import Timer
 from picamera import PiCamera
 from securepi import app, tools
+from securepi.DetectorAPI import DetectorAPI
 from securepi.camera import VideoCamera
 from flask import Response
 from securepi.models import User, Email, Records
 from securepi import db
+import imageio
 
 
-PROFILE_FACE = cv2.CascadeClassifier('haarcascades/haarcascade_profileface.xml')
-FRONTAL_FACE = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
-UPPER_BODY = cv2.CascadeClassifier('haarcascades/haarcascade_upperbody.xml')
-FULL_BODY = cv2.CascadeClassifier('haarcascades/haarcascade_fullbody.xml')
-
-OBJECT_CLASSIFIERS = [PROFILE_FACE, FRONTAL_FACE, UPPER_BODY, FULL_BODY]
 
 UPDATE_INTERVAL = 5 # only once in this time interval
 VIDEO_CAMERA = VideoCamera(flip=False) # creates a camera object, flip vertically
-COUNTER = 0
+API = DetectorAPI()
+THRESHOLD = 0.7
 
 def check_for_objects():
-    global COUNTER
     while True:
         try:
-	        for object_classifier in OBJECT_CLASSIFIERS:
-	            frame, found_obj = VIDEO_CAMERA.check_for_object(object_classifier)
-	            if found_obj and (time.time() - COUNTER) > UPDATE_INTERVAL:
-	                COUNTER = time.time()
-	                now = datetime.now()
-	                print("{} OBJECT DETECTED".format(now.strftime("%d/%m/%Y_%H:%M:%S")))
-	                # write to file
-	                f = open('securepi/static/records/{}.jpg'.format(now.strftime("%d-%m-%Y_%H:%M:%S")), 'wb')
-	                f.write(bytearray(frame))
-	                f.close()
+            time.sleep(UPDATE_INTERVAL)
+            tools.update_config()
+            frame_in_bytes = VIDEO_CAMERA.get_frame()
+            #Convert the frame from bytes to nparray so it can be processed by the API
+            decoded = cv2.imdecode(np.frombuffer(frame_in_bytes, np.uint8), -1)
+            boxes, scores, classes, num = API.processFrame(decoded)
 
-	                #update database
-	                new_record = Records(created_at = now.strftime("%d/%m/%Y %H:%M:%S"), file_type = "picture", path_filename = "{}.jpg".format(now.strftime("%d-%m-%Y_%H:%M:%S")))
-	                db.session.add(new_record)
-	                db.session.commit()
+            for i in range(len(boxes)):
+                # Class 1 represents human
+                if classes[i] == 1 and scores[i] > THRESHOLD:
+                    box = boxes[i]
+                    cv2.rectangle(decoded,(box[1],box[0]),(box[3],box[2]),(0,0,255),2)
+                    color_conversion = cv2.cvtColor(decoded, cv2.COLOR_BGR2RGB)
+                    now = datetime.now()
+                    imageio.imwrite('securepi/static/records/{}.jpg'.format(now.strftime("%d-%m-%Y_%H:%M:%S")), color_conversion)
+
+                    #update database
+                    new_record = Records(created_at = now.strftime("%d/%m/%Y %H:%M:%S"), file_type = "picture", path_filename = "{}.jpg".format(now.strftime("%d-%m-%Y_%H:%M:%S")))
+                    db.session.add(new_record)
+                    db.session.commit()
         except:
             print("Error: ", sys.exc_info()[0])
-
 
 def gen(camera):
     while True:
