@@ -3,7 +3,9 @@
 {% block title %}
     <title>Secure-PI   |    Dashboard</title>
 {% endblock %}
-
+{% block script_or_link %}
+<script src="{{url_for('static', filename='js/jquery/dist/jquery.min.js')}}"></script>
+{% endblock %}
 {% block body_content %}
     {{ test }}<br>
   <div class="row">

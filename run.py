@@ -27,9 +27,9 @@ THRESHOLD = 0.7
 def check_for_objects():
     while True:
         try:
-            time.sleep(UPDATE_INTERVAL)
             tools.update_config()
             frame_in_bytes = VIDEO_CAMERA.get_frame()
+            # frame_in_bytes.truncate(0)
             #Convert the frame from bytes to nparray so it can be processed by the API
             decoded = cv2.imdecode(np.frombuffer(frame_in_bytes, np.uint8), -1)
             boxes, scores, classes, num = API.processFrame(decoded)
@@ -39,16 +39,20 @@ def check_for_objects():
                 if classes[i] == 1 and scores[i] > THRESHOLD:
                     box = boxes[i]
                     cv2.rectangle(decoded,(box[1],box[0]),(box[3],box[2]),(0,0,255),2)
+                    #this is supposed get rid of that weird exception while running on night
                     color_conversion = cv2.cvtColor(decoded, cv2.COLOR_BGR2RGB)
                     now = datetime.now()
                     imageio.imwrite('securepi/static/records/{}.jpg'.format(now.strftime("%d-%m-%Y_%H:%M:%S")), color_conversion)
+                    # color_conversion.truncate(0)
 
                     #update database
-                    new_record = Records(created_at = now.strftime("%d/%m/%Y %H:%M:%S"), file_type = "picture", path_filename = "{}.jpg".format(now.strftime("%d-%m-%Y_%H:%M:%S")))
+                    new_record = Records(created_at = now.strftime("%d/%m/%Y"), file_type = "picture", path_filename = "{}.jpg".format(now.strftime("%d-%m-%Y_%H:%M:%S")))
                     db.session.add(new_record)
                     db.session.commit()
         except:
             print("Error: ", sys.exc_info()[0])
+            print(sys.exc_info()[1])
+            print(sys.exc_info()[2].tb_lineno)
 
 def gen(camera):
     while True:

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import cv2
-import imutils
+# import imutils
 import time
 import numpy as np
-from imutils.video.pivideostream import PiVideoStream
+# from imutils.video.pivideostream import PiVideoStream
 from datetime import datetime
+from imutils.video.pivideostream import PiVideoStream
 
 class VideoCamera(object):
     def __init__(self, flip = False):

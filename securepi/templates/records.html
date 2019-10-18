@@ -2,46 +2,60 @@
 
 {% extends 'template.html' %}
 
+
 {% block title %}
     <title>Secure-PI   |    Records</title>
 {% endblock %}
 
+{% block script_or_link %}
+    <!-- jQuery 3 -->
+<script src="{{url_for('static', filename='js/jquery/dist/jquery.min.js')}}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+{% endblock %}
+
+
 {% block body_content %}
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
 
-    	<div class="row">
-    		<div class="container-fluid">
-				<!-- div to contain the content -->
-				<div id="scroller">
-				  <!-- template schema, hidden from the dom -->
-		    		<template id="post_template">
-		    			<div class="col-md-4">
-				          <div class="box box-widget"  id="scroller">
-				            <div class="box-header with-border">
-				              <div class="user-block">
-				                <h4 class="card-title" id="title"></h4>
-				              </div>
-				              <!-- /.user-block -->
-				            </div>
-				            <!-- /.box-header -->
-				            <div class="box-body">
-				              <img class="img-responsive pad" id="content" alt="Photo">
-				            </div>
-				            <!-- /.box-body -->
-				          </div>
-		    			</div>
-		    		</template>
-				</div>
-				<!-- element to trigger the IntersectionObserver -->
-    		</div>
-				<div class="d-flex" id="sentinel">
-				  <div class="spinner-border" role="status"><i class="fa fa-refresh fa-spin"></i></div>
-				</div>
-    	</div>
-
-
-
-
+      <div class="row">
+        <div class="container-fluid">
+                <div class="col-md-12 center-block" style="padding-bottom: 2rem">
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                      <input type="text" class="form-control pull-right" id="daterange" name="daterange" value=""/>
+                    </div>
+                </div>
+        <!-- div to contain the content -->
+        <div id="scroller">
+          <!-- template schema, hidden from the dom -->
+            <template id="post_template">
+              <div class="col-md-4">
+                  <div class="box box-widget"  id="scroller">
+                    <div class="box-header with-border">
+                      <div class="user-block">
+                        <h4 class="card-title" id="title"></h4>
+                      </div>
+                      <!-- /.user-block -->
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                      <img class="img-responsive pad" id="content" alt="Photo">
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+              </div>
+            </template>
+        </div>
+        <!-- element to trigger the IntersectionObserver -->
+        </div>
+        <div class="d-flex" id="sentinel">
+          <div class="spinner-border" role="status"><i class="fa fa-refresh fa-spin"></i></div>
+        </div>
+      </div>
 
 
 
@@ -54,11 +68,24 @@ var sentinel = document.querySelector('#sentinel');
 // Set a counter to count the items loaded
 var counter = 0;
 
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+          tmp = item.split("=");
+          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+}
+
 // Function to request new items and render to the dom
 function loadItems() {
 
   // Use fetch to request data and pass the counter value in the QS
-  fetch(`/load?c=${counter}`).then((response) => {
+  fetch(`/load?c=${counter}&start_date=${findGetParameter("start_date")}&last_date=${findGetParameter("last_date")}`).then((response) => {
 
     // Convert the response data to JSON
     response.json().then((data) => {
@@ -116,6 +143,17 @@ var intersectionObserver = new IntersectionObserver(entries => {
 
 // Instruct the IntersectionObserver to watch the sentinel
 intersectionObserver.observe(sentinel);
+</script>
+
+<script>
+console.log(document.getElementById('daterange').value)
+$(function() {
+  $('input[name="daterange"]').daterangepicker({
+  autoUpdateInput: false,
+  }, function(start, end) {
+      window.location.search = 'start_date=' + encodeURIComponent(start.format("DD/MM/YYYY")) + "&last_date=" + encodeURIComponent(end.format("DD/MM/YYYY"));
+  });
+});
 </script>
 {% endblock %}
 

@@ -3,7 +3,9 @@
 {% block title %}
     <title>Secure-PI   |    Control Room</title>
 {% endblock %}
-
+{% block script_or_link %}
+<script src="{{url_for('static', filename='js/jquery/dist/jquery.min.js')}}"></script>
+{% endblock %}
 {% block body_content %}
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
     <div class="row">

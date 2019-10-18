@@ -173,19 +173,27 @@ def records():
 
 @app.route("/load", methods=['GET', 'POST'])
 def load():
-    db = [i.serialize for i in Records.query.order_by(Records.id.desc()).all()]  #DATABASE
-    posts = len(db)  # num posts to generate
+    if request.args.get("start_date") != "null" or request.args.get("last_date") != "null":
+        database = [i.serialize for i in
+                    db.session.query(Records).filter(Records.created_at >= request.args.get("start_date"),
+                                                     Records.created_at <= request.args.get("last_date")).all()]
+        print("search args found")
+    else:
+        database = [i.serialize for i in Records.query.order_by(Records.id.desc()).all()]
+        print("all records, no search args")
+
+    posts = len(database)  # num posts to generate
     quantity = 21  # num posts to return per request
 
     # time.sleep(0.2)  # Used to simulate delay
-    
+
     if request.args:
         counter = int(request.args.get("c"))  # The 'counter' value sent in the QS
 
         if counter == 0:
             print(f"Returning posts 0 to {quantity}")
             # Slice 0 -> quantity from the db
-            res = make_response(jsonify(db[0: quantity]), 200)
+            res = make_response(jsonify(database[0: quantity]), 200)
 
         elif counter == posts:
             print("No more posts")
@@ -194,6 +202,17 @@ def load():
         else:
             print(f"Returning posts {counter} to {counter + quantity}")
             # Slice counter -> quantity from the db
-            res = make_response(jsonify(db[counter: counter + quantity]), 200)
+            res = make_response(jsonify(database[counter: counter + quantity]), 200)
 
     return res
+
+@app.route("/records/search", methods=['GET', 'POST'])
+def search_records():
+    # sql = "SELECT * FROM records"
+    # result = db.engine.execute(sql)
+    # names = [Records for row in result]
+    # print(type(names[0]))
+
+    database = [i.serialize for i in db.session.query(Records).filter(Records.created_at >= "1/10/2019",
+                                                                      Records.created_at <= "15/10/2019").all()]
+    return make_response(jsonify(database))

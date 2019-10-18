@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="{{url_for('static', filename='css/AdminLTE.min.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/skin-red.min.css')}}">
 
+  {% block script_or_link %}{% endblock %}
+
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -163,8 +165,7 @@
 
 <!-- REQUIRED JS SCRIPTS -->
 
-<!-- jQuery 3 -->
-<script src="{{url_for('static', filename='js/jquery/dist/jquery.min.js')}}"></script>
+
 <!-- Bootstrap 3.3.7 -->
 <script src="{{url_for('static', filename='css/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <!-- AdminLTE App -->
@@ -172,6 +173,5 @@
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
-
 </body>
 </html>
