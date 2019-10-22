@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from datetime import datetime, timedelta
 
 from flask import Flask, escape, request, render_template, redirect, url_for, session, Response, jsonify, make_response
 from securepi import app, tools, db
@@ -7,16 +8,34 @@ from securepi.models import User, Email, Records
 import json
 import cv2
 
-# CONSTANTS
-TEMPERATURE = tools.measure_temp()
-MEMORY_AVAILABLE = tools.get_machine_storage()
 with open('config.json') as json_file:
     CONFIG = json.load(json_file)
 
 
 @app.route('/')
 def index():
-    return render_template('index.html', temperature_value=TEMPERATURE, memory_available_value=MEMORY_AVAILABLE)
+    today_date = datetime.today().strftime("%Y-%m-%d")
+    week = (datetime.today() - timedelta(days=7)).strftime("%Y-%m-%d")
+    month = (datetime.today() - timedelta(days=30)).strftime("%Y-%m-%d")
+
+    all_records = len(Records.query.order_by(Records.id).all())
+
+    today_records = len(db.session.query(Records).filter(Records.created_at.between(today_date, today_date)).all())
+
+    last_7_days = len(db.session.query(Records).filter(Records.created_at.between(week, today_date)).all())
+
+    last_30_days = len(db.session.query(Records).filter(Records.created_at.between(month, today_date)).all())
+
+    data = [all_records,
+            today_records,
+            last_7_days,
+            last_30_days]
+
+    TEMPERATURE = tools.measure_temp()
+    MEMORY_AVAILABLE = tools.get_machine_storage()
+
+    return render_template('index.html', temperature_value=TEMPERATURE, memory_available_value=MEMORY_AVAILABLE,
+                           data=data)
 
 
 @app.route('/logout')
@@ -64,6 +83,10 @@ def login():
 
 @app.route('/smtp/', methods=['GET', 'POST'])
 def smtp():
+    TEMPERATURE = tools.measure_temp()
+    MEMORY_AVAILABLE = tools.get_machine_storage()
+
+
     form = UpdateSMTPForm(request.form)
     form2 = UpdateEmailAddress(request.form)
     form3 = AddNewEmail(request.form)
@@ -138,6 +161,9 @@ def change_notification_status(id):
 
 @app.route('/settings/', methods=['GET', 'POST'])
 def settings():
+    TEMPERATURE = tools.measure_temp()
+    MEMORY_AVAILABLE = tools.get_machine_storage()
+
     form = SettingsForm()
 
     if form.validate_on_submit():
@@ -164,12 +190,18 @@ def settings():
 
 @app.route('/live_view/', methods=['GET', 'POST'])
 def live_view():
+    TEMPERATURE = tools.measure_temp()
+    MEMORY_AVAILABLE = tools.get_machine_storage()
+
     return render_template('live_view.html', temperature_value=TEMPERATURE,
                     memory_available_value=MEMORY_AVAILABLE)
 
 @app.route("/records", methods=['GET', 'POST'])
 def records():
-    return render_template('records.html')
+    TEMPERATURE = tools.measure_temp()
+    MEMORY_AVAILABLE = tools.get_machine_storage()
+    return render_template('records.html', temperature_value=TEMPERATURE,
+                           memory_available_value=MEMORY_AVAILABLE)
 
 @app.route("/load", methods=['GET', 'POST'])
 def load():
@@ -205,14 +237,3 @@ def load():
             res = make_response(jsonify(database[counter: counter + quantity]), 200)
 
     return res
-
-@app.route("/records/search", methods=['GET', 'POST'])
-def search_records():
-    # sql = "SELECT * FROM records"
-    # result = db.engine.execute(sql)
-    # names = [Records for row in result]
-    # print(type(names[0]))
-
-    database = [i.serialize for i in db.session.query(Records).filter(Records.created_at >= "1/10/2019",
-                                                                      Records.created_at <= "15/10/2019").all()]
-    return make_response(jsonify(database))

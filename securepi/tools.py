@@ -28,7 +28,7 @@ def measure_temp():
     try:
         if linux_interaction() == True:
             temp = os.popen("vcgencmd measure_temp").readline()
-            return (temp.replace("temp=", "")).strip()
+            return (temp.replace("temp=", "")).replace("'C", "").strip()
         else:
             return ('n\\a')
     except:
@@ -46,7 +46,7 @@ def get_machine_storage():
             giga = 1000 * 1000 * 1000
             total_size = total_blocks * block_size / giga
             free_size = free_blocks * block_size / giga
-            return ('%s GB' % free_size)
+            return ('%s GB' % int(free_size))
         else:
             return ('n\\a')
     except:

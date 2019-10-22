@@ -10,10 +10,18 @@
 {% block script_or_link %}
     <!-- jQuery 3 -->
 <script src="{{url_for('static', filename='js/jquery/dist/jquery.min.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/lightbox.min.css')}}" />
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script src="{{url_for('static', filename='js/lightbox.min.js')}}"></script>
 {% endblock %}
+
+<style type="text/css">
+#scroller a img:hover{
+  transform: scale(1.1);
+}
+</style>
 
 
 {% block body_content %}
@@ -34,21 +42,22 @@
           <!-- template schema, hidden from the dom -->
             <template id="post_template">
               <div class="col-md-4">
-                  <div class="box box-widget"  id="scroller">
-                    <div class="box-header with-border">
-                      <div class="user-block">
-                        <h4 class="card-title" id="title"></h4>
-                      </div>
-                      <!-- /.user-block -->
+                  <div class="box box-widget" id="scroller">
+			            <div class="box-header">
+			              <div class="user-block">
+			                <h4 class="card-title" id="title"></h4>
+			              </div>
+			              <!-- /.user-block -->
+			            </div>
+                    <div>
+                      <a id="content1" data-lightbox="records">
+                        <img class="img-responsive pad" id="content2"/>
+                      </a>
                     </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                      <img class="img-responsive pad" id="content" alt="Photo">
-                    </div>
-                    <!-- /.box-body -->
                   </div>
               </div>
             </template>
+
         </div>
         <!-- element to trigger the IntersectionObserver -->
         </div>
@@ -93,8 +102,8 @@ function loadItems() {
       // If empty JSON, exit the function
       if (!data.length) {
 
-        // Replace the spinner with "No more posts"
-        sentinel.innerHTML = "No more posts";
+        // Replace the spinner with "No more records"
+        sentinel.innerHTML = "No more records";
         return;
       }
 
@@ -105,9 +114,10 @@ function loadItems() {
         let template_clone = template.content.cloneNode(true);
 
         // Query & update the template content
-        template_clone.querySelector("#title").innerHTML = `${data[i].id}: ${data[i].created_at}, ${data[i].file_type}`;
-        template_clone.querySelector("#content").src = Flask.url_for("static", {"filename": "records/" + data[i].path_filename }) 
-
+        // template_clone.querySelector("#title").innerHTML = `${data[i].id}: ${data[i].created_at}, ${data[i].file_type}`;
+        template_clone.querySelector("#title").innerHTML = "Picture taken: " + data[i].path_filename.replace(".jpg", "");
+        template_clone.querySelector("#content1").href = Flask.url_for("static", {"filename": "records/" + data[i].path_filename }) 
+        template_clone.querySelector("#content2").src = Flask.url_for("static", {"filename": "records/" + data[i].path_filename }) 
         // Append template to dom
         scroller.appendChild(template_clone);
 
@@ -151,9 +161,16 @@ $(function() {
   $('input[name="daterange"]').daterangepicker({
   autoUpdateInput: false,
   }, function(start, end) {
-      window.location.search = 'start_date=' + encodeURIComponent(start.format("DD/MM/YYYY")) + "&last_date=" + encodeURIComponent(end.format("DD/MM/YYYY"));
+      window.location.search = 'start_date=' + encodeURIComponent(start.format("YYYY-MM-DD")) + "&last_date=" + encodeURIComponent(end.format("YYYY-MM-DD"));
   });
 });
+</script>
+
+<script>
+    lightbox.option({
+      'maxWidth': 1024,
+      'maxHeight': 768
+    })
 </script>
 {% endblock %}
 

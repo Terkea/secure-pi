@@ -6,6 +6,7 @@
 {% block script_or_link %}
 <script src="{{url_for('static', filename='js/jquery/dist/jquery.min.js')}}"></script>
 {% endblock %}
+
 {% block body_content %}
     {{ test }}<br>
   <div class="row">
@@ -13,12 +14,12 @@
       <!-- small box -->
       <div class="small-box bg-aqua">
         <div class="inner">
-          <h3>150</h3>
+          <h3>{{ data[0] }}</h3>
 
-          <p>Pictures taken</p>
+          <p>Total</p>
         </div>
         <div class="icon">
-          <i class="ion ion-stats-bars"></i>
+          <i class="ion ion-person"></i>
         </div>
       </div>
     </div>
@@ -27,9 +28,9 @@
       <!-- small box -->
       <div class="small-box bg-green">
         <div class="inner">
-          <h3>53</h3>
+          <h3>{{ data[1] }}</h3>
 
-          <p>Body recognition</p>
+          <p>Today</p>
         </div>
         <div class="icon">
           <i class="ion ion-person"></i>
@@ -41,9 +42,9 @@
       <!-- small box -->
       <div class="small-box bg-yellow">
         <div class="inner">
-          <h3>44</h3>
+          <h3>{{ data[2] }}</h3>
 
-          <p>Face recognition</p>
+          <p>Last 7 days</p>
         </div>
         <div class="icon">
           <i class="ion ion-person"></i>
@@ -55,12 +56,12 @@
       <!-- small box -->
       <div class="small-box bg-red">
         <div class="inner">
-          <h3>65</h3>
+          <h3>{{ data[3] }}</h3>
 
-          <p>Unidentified targets</p>
+          <p>Last 30 days</p>
         </div>
         <div class="icon">
-          <i class="ion ion-pie-graph"></i>
+          <i class="ion ion-person"></i>
         </div>
       </div>
     </div>
