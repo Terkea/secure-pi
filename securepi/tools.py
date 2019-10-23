@@ -11,7 +11,7 @@ import json
 import socket
 
 
-from securepi.models import Email
+from securepi.models import User
 
 with open('config.json') as json_file:
     CONFIG = json.load(json_file)
@@ -61,11 +61,10 @@ def encrypt(string):
 
 #PASSWORD CHECK IF HASH CORESPONDS TO STRING
 def check_hash(string, hash):
-    if bcrypt.checkpw(string.encode('utf-8'), hash.encode('utf-8')):
+    if bcrypt.checkpw(string.encode('utf-8'), hash):
         return True
     else:
         return False
-
 
 #check if credentials are working
 def test_email(server, port, username, password):
@@ -85,7 +84,7 @@ def send_email(message, subject):
         # CREATE THE EMAIL
         message = 'Subject: Secure-pi | {}\n\n{}'.format(subject, message)
 
-        query = Email.query.filter_by(notifications=True).all()
+        query = User.query.filter_by(notifications=True).all()
         context = ssl.create_default_context()
 
         server = smtplib.SMTP_SSL(CONFIG['SMTP']['server'], CONFIG['SMTP']['port'])
@@ -121,6 +120,7 @@ def update_config():
         Don't worry, we got you :D \n
         The new IP address is {}:{}""".format(get_public_ip(), CONFIG['NETWORK']["running_port"]), "DHCP Notification")
         CONFIG['NETWORK']['public_ip'] = get_public_ip()
+        CONFIG['NETWORK']['hostname'] = get_hostname()
         with open('config.json', 'w') as f:
             f.write(json.dumps(CONFIG))
             f.close()

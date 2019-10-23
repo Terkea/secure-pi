@@ -1,0 +1,137 @@
+{% extends 'template.html' %}
+
+{% block title %}
+    <title>Secure-PI   |    SMTP</title>
+{% endblock %}
+
+{% block script_or_link %}
+<script src="{{url_for('static', filename='js/jquery/dist/jquery.min.js')}}"></script>
+{% endblock %}
+
+{% block body_content %}
+  <!-- Custom Tabs -->
+  <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+      <li ><a href="{{url_for('smtp')}}" ><h4>SMTP Server</h4></a></li>
+      <li class="active"><a href="{{url_for('accounts')}}"><h4>Accounts</h4></a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab_1">
+        <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th>ID</th>
+                  <th>EMAIL</th>
+                  <th>NOTIFICATIONS</th>
+                    <th>ACTIONS</th>
+                </tr>
+                {% for foo in query %}
+                    <tr>
+                      <td>{{ foo.id }}</td>
+                      <td>{{ foo.email }}</td>
+{#                        <td> {{ foo.notification }}</td>#}
+                        {% if foo.notifications == False %}
+                            <td><span class="label label-danger">OFF</span></td>
+                        {% endif %}
+                        {% if foo.notifications == True %}
+                            <td><span class="label label-success">ON</span></td>
+                        {% endif %}
+                        <td>
+                            <a href="/change_notification_status/{{ foo.id }}">
+                                <button class="btn btn-sm btn-default">turn off notifications</button>
+                            </a>
+                            <a href="#" data-toggle="modal" data-target="#{{ foo.id }}">
+                                <button class="btn btn-sm btn-default" >update</button>
+                            </a>
+                                <div class="modal fade" id="{{ foo.id }}">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Update the email address</h4>
+                                      </div>
+                                        <form action="/settings/accounts/" method="post">
+                                            {{ form2.csrf_token }}
+                                          <div class="modal-body">
+                                              <div class="form-group">
+                                                  {{ form2.email_update(class='form-control', value=foo.email ) }}
+                                                  <br>
+                                                  {{ form2.old_password(class='form-control', value=foo.password, placeholder="Old password" ) }}
+                                                  <br>
+                                                  {{ form2.password(class='form-control', value=foo.password, placeholder="New password" ) }}
+                                                  <br>
+                                                  {{ form2.confirm_password(class='form-control', value=foo.password, placeholder="Confirm new password" ) }}
+                                                  {{ form2.id(type='hidden', value=foo.id) }}
+                                              </div>
+                                          </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                                <input type="submit" class="btn btn-danger" id="form2-submit" name="form2-submit" value="Update">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                  </div>
+                                  <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
+                            <a href="/delete_email/{{ foo.id }}">
+                                <button class="btn btn-sm btn-default">delete</button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+         <a href="#" data-toggle="modal" data-target="#new_email_modal" class="btn btn-default">Add new account</a>
+          <div class="modal fade" id="new_email_modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Add a new email address</h4>
+              </div>
+                <form action="/settings/accounts/" method="post">
+                    {{ form3.csrf_token }}
+                  <div class="modal-body">
+                      <div class="form-group">
+                          {{ form3.email(class='form-control', placeholder='Email address') }}
+                          <br>
+                          {{ form3.password(class='form-control', placeholder='Password') }}
+                          <br>
+                          {{ form3.confirm_password(class='form-control', placeholder='Confirm Password') }}
+                      </div>
+                  </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-danger" id="form3-submit" name="form3-submit" value="Create user">
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+      </div>
+
+    <!-- /.tab-content -->
+  </div>
+  </div>
+  <!-- nav-tabs-custom -->
+
+{% endblock %}

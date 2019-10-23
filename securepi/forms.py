@@ -17,21 +17,15 @@ class UpdateSMTPForm(FlaskForm):
     port = StringField('Port', validators=[DataRequired(message='Field required')])
 
 
-class UpdateEmailAddress(FlaskForm):
+class UpdateAccount(FlaskForm):
     email_update = StringField('Email Address', validators=[DataRequired(message='Field required'), Email()])
+    old_password = PasswordField('Old password', validators=[DataRequired(message='field required')])
+    password = PasswordField('Password', validators=[DataRequired(message='field required')])
+    confirm_password = PasswordField('Password', validators=[DataRequired(message='field required')])
     id = StringField('ID', validators=[DataRequired(message='Field required')])
 
 
-class AddNewEmail(FlaskForm):
+class CreateNewAccount(FlaskForm):
     email = StringField('Email Address', validators=[DataRequired(message='Field required'), Email()])
-
-
-class SettingsForm(FlaskForm):
-    picture_resolution = StringField('Picture resolution',
-                                     validators=[DataRequired(message='Picture resolution Field required')])
-    brightness = StringField('Brightness', validators=[DataRequired(message='Brightness Field required')])
-    contrast = StringField('Contrast', validators=[DataRequired(message='Contrast Field required')])
-    saturation = StringField('Saturation', validators=[DataRequired(message='Saturation Field required')])
-    how_often_to_take_pictures = StringField('How often', validators=[DataRequired(message='How often Field required')])
-    border_color = StringField('Border color', validators=[DataRequired(message='Border color Field required')])
-    store_location = StringField('Store location', validators=[DataRequired(message='Store location Field required')])
+    password = PasswordField('Password', validators=[DataRequired(message='field required')])
+    confirm_password = PasswordField('Password', validators=[DataRequired(message='field required')])

@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 
 from flask import Flask, escape, request, render_template, redirect, url_for, session, Response, jsonify, make_response
 from securepi import app, tools, db
-from securepi.forms import LoginForm, UpdateSMTPForm, UpdateEmailAddress, AddNewEmail, SettingsForm
-from securepi.models import User, Email, Records
+from securepi.forms import LoginForm, UpdateSMTPForm, UpdateAccount, CreateNewAccount
+from securepi.models import User, Records
 import json
 import cv2
 
@@ -31,11 +31,18 @@ def index():
             last_7_days,
             last_30_days]
 
+    chart_data = []
+
+    for i in range(1, 31):
+        chart_data.append(len(db.session.query(Records).filter(Records.created_at.between(
+            (datetime.today() - timedelta(days=i)).strftime("%Y-%m-%d"),
+            (datetime.today() - timedelta(days=i)).strftime("%Y-%m-%d"))).all()))
+
     TEMPERATURE = tools.measure_temp()
     MEMORY_AVAILABLE = tools.get_machine_storage()
 
     return render_template('index.html', temperature_value=TEMPERATURE, memory_available_value=MEMORY_AVAILABLE,
-                           data=data)
+                           data=data, config=CONFIG, chart_data=chart_data)
 
 
 @app.route('/logout')
@@ -80,56 +87,6 @@ def login():
         print("FAIL")
     return render_template('login.html', form=form)
 
-
-@app.route('/smtp/', methods=['GET', 'POST'])
-def smtp():
-    TEMPERATURE = tools.measure_temp()
-    MEMORY_AVAILABLE = tools.get_machine_storage()
-
-
-    form = UpdateSMTPForm(request.form)
-    form2 = UpdateEmailAddress(request.form)
-    form3 = AddNewEmail(request.form)
-    query = Email.query.all()
-
-    if "form-submit" in request.form and form.validate_on_submit():
-        email = str(form.email.data)
-        password = str(form.password.data)
-        server = str(form.server.data)
-        port = str(form.port.data)
-
-        if tools.test_email(server, port, email, password):
-            CONFIG['SMTP']['server'] = server
-            CONFIG['SMTP']['port'] = port
-            CONFIG['SMTP']['username'] = email
-            CONFIG['SMTP']['password'] = password
-
-            with open('config.json', 'w') as f:
-                f.write(json.dumps(CONFIG))
-                f.close()
-        else:
-            form.server.errors.append(
-                "Invalid account, be sure that you have less secure app access turned on or try with a gmail account")
-
-    if "form2-submit" in request.form and form2.validate_on_submit():
-        query = Email.query.get(str(form2.id.data))
-        query.email = str(form2.email_update.data)
-        db.session.commit()
-        query = Email.query.all()
-
-    # todo check if the email is unique
-    if "form3-submit" in request.form and form3.validate_on_submit():
-        email = str(form3.email.data)
-        newemail = Email(email=email, notifications=True)
-
-        db.session.add(newemail)
-        db.session.commit()
-        query = Email.query.all()
-
-    return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form, form2=form2, form3=form3,
-                           temperature_value=TEMPERATURE, memory_available_value=MEMORY_AVAILABLE)
-
-
 @app.route('/delete_email/<int:id>', methods=['GET', 'POST'])
 def delete_email(id):
     query = Email.query.get_or_404(id)
@@ -157,36 +114,6 @@ def change_notification_status(id):
             return redirect(url_for('smtp'))
     except:
         return 'There was a problem changing the notification status on that email'
-
-
-@app.route('/settings/', methods=['GET', 'POST'])
-def settings():
-    TEMPERATURE = tools.measure_temp()
-    MEMORY_AVAILABLE = tools.get_machine_storage()
-
-    form = SettingsForm()
-
-    if form.validate_on_submit():
-        CONFIG['SETTINGS']['picture_resolution'] = str(form.picture_resolution.data)
-        CONFIG['SETTINGS']['brightness'] = str(form.brightness.data)
-        CONFIG['SETTINGS']['contrast'] = str(form.contrast.data)
-        CONFIG['SETTINGS']['saturation'] = str(form.saturation.data)
-        CONFIG['SETTINGS']['how_often_to_take_pictures'] = str(form.how_often_to_take_pictures.data)
-        CONFIG['SETTINGS']['border_color'] = str(form.border_color.data)
-        CONFIG['SETTINGS']['store_location'] = str(form.store_location.data)
-
-        print('FILE UPDATED')
-
-        with open('config.json', 'w') as f:
-            f.write(json.dumps(CONFIG))
-            f.close()
-
-    else:
-        print('FAIL')
-
-    return render_template('settings.html', config=CONFIG, temperature_value=TEMPERATURE,
-                           memory_available_value=MEMORY_AVAILABLE, form=form)
-
 
 @app.route('/live_view/', methods=['GET', 'POST'])
 def live_view():
@@ -237,3 +164,71 @@ def load():
             res = make_response(jsonify(database[counter: counter + quantity]), 200)
 
     return res
+
+@app.route("/settings/accounts/", methods=['GET', 'POST'])
+def accounts():
+    TEMPERATURE = tools.measure_temp()
+    MEMORY_AVAILABLE = tools.get_machine_storage()
+    form2 = UpdateAccount()
+    form3 = CreateNewAccount()
+    query = User.query.all()
+
+
+    if "form2-submit" in request.form and form2.validate_on_submit():
+        query = User.query.get(str(form2.id.data))
+        if tools.check_hash(str(form2.old_password.data), query.password):
+            password = str(form2.password.data)
+            confirm_password = str(form2.confirm_password.data)
+            if (password == confirm_password):
+                query.email = str(form2.email_update.data)
+                query.password = tools.encrypt(password)
+                db.session.commit()
+        query = User.query.all()
+
+    # todo check if the email is unique
+    if "form3-submit" in request.form and form3.validate_on_submit():
+        email = str(form3.email.data)
+        password = str(form3.password.data)
+        confirm_password = str(form3.confirm_password.data)
+        if(password == confirm_password):
+            user = User(email=email,password=tools.encrypt(password), notifications=True)
+            db.session.add(user)
+            db.session.commit()
+
+        query = User.query.all()
+
+    return render_template('accounts.html', config=CONFIG['SMTP'], query=query, form2=form2, form3=form3,
+                           temperature_value=TEMPERATURE, memory_available_value=MEMORY_AVAILABLE)
+
+@app.route('/settings/smtp/', methods=['GET', 'POST'])
+def smtp():
+    TEMPERATURE = tools.measure_temp()
+    MEMORY_AVAILABLE = tools.get_machine_storage()
+
+
+    form = UpdateSMTPForm(request.form)
+    form2 = UpdateAccount(request.form)
+    form3 = CreateNewAccount(request.form)
+    query = User.query.all()
+
+    if "form-submit" in request.form and form.validate_on_submit():
+        email = str(form.email.data)
+        password = str(form.password.data)
+        server = str(form.server.data)
+        port = str(form.port.data)
+
+        if tools.test_email(server, port, email, password):
+            CONFIG['SMTP']['server'] = server
+            CONFIG['SMTP']['port'] = port
+            CONFIG['SMTP']['username'] = email
+            CONFIG['SMTP']['password'] = password
+
+            with open('config.json', 'w') as f:
+                f.write(json.dumps(CONFIG))
+                f.close()
+        else:
+            form.server.errors.append(
+                "Invalid account, be sure that you have less secure app access turned on or try with a gmail account")
+
+    return render_template('smtp.html', config=CONFIG['SMTP'], query=query, form=form, form2=form2, form3=form3,
+                           temperature_value=TEMPERATURE, memory_available_value=MEMORY_AVAILABLE)

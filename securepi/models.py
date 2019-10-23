@@ -7,17 +7,10 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
-
-    def __repr__(self):
-        return f"User('{self.id}', '{self.email}', '{self.password}')"
-
-class Email(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
     notifications = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):
-        return f"Email('{self.id}', '{self.email}', '{self.notifications}')"
+        return f"User('{self.id}', '{self.email}', '{self.password}', '{self.notifications}')"
 
 class Records(db.Model):
     id = db.Column(db.Integer, primary_key=True)

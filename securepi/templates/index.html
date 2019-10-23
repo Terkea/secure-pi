@@ -5,6 +5,8 @@
 {% endblock %}
 {% block script_or_link %}
 <script src="{{url_for('static', filename='js/jquery/dist/jquery.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.css">
 {% endblock %}
 
 {% block body_content %}
@@ -19,7 +21,7 @@
           <p>Total</p>
         </div>
         <div class="icon">
-          <i class="ion ion-person"></i>
+          <i class="ion ion-stats-bars"></i>
         </div>
       </div>
     </div>
@@ -61,16 +63,104 @@
           <p>Last 30 days</p>
         </div>
         <div class="icon">
-          <i class="ion ion-person"></i>
+          <i class="ion ion-pie-graph"></i>
         </div>
       </div>
     </div>
-    <!-- ./col -->
-  </div>
-{% endblock %}
 
+    <div class="col-md-12">
+        <canvas id="myChart"></canvas>
+    </div>
+
+
+
+    <div class="col-md-12" style="margin-top: 3rem;">
+            <table class="table table-striped table-bordered dt-responsive nowrap">
+                <tbody>
+                <tr>
+                    <th scope="row">IP Address:</th>
+                    <td>{{ config["NETWORK"]['public_ip'] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Running port:</th>
+                    <td>{{ config["NETWORK"]['running_port'] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Hostname:</th>
+                    <td>{{ config["NETWORK"]['hostname'] }}</td>
+                </tr>
+                </tbody>
+            </table>
+    </div>
+
+  </div>
 <script>
-    $(document).ready(function(){
-     $('#dashboard').addClass('active');
-    });
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ["One Day ago",
+                "2 Days ago",
+                "3 Days ago",
+                "4 Days ago",
+                "5 Days ago",
+                "6 Days ago",
+                "7 Days ago",
+                "8 Days ago",
+                "9 Days ago",
+                "10 Days ago",
+                "11 Days ago",
+                "12 Days ago",
+                "13 Days ago",
+                "14 Days ago",
+                "15 Days ago",
+                "16 Days ago",
+                "17 Days ago",
+                "18 Days ago",
+                "19 Days ago",
+                "20 Days ago",
+                "21 Days ago",
+                "22 Days ago",
+                "23 Days ago",
+                "24 Days ago",
+                "25 Days ago",
+                "26 Days ago",
+                "27 Days ago",
+                "28 Days ago",
+                "29 Days ago",
+                "30 Days ago"],
+        datasets: [{
+            data: {{ chart_data }},
+            label: "Pictures taken",
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)'
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                ticks: {
+                    minRotation: 90,
+                    maxRotation: 90
+                }
+            }],
+            yAxes: [{
+                display: true,
+                ticks: {
+                    suggestedMin: 0,
+                    beginAtZero: true
+                }
+            }]
+  },
+        layout: {
+            padding: {
+                left: 10,
+                right: 10,
+                bottom: 50
+            }
+        }
+    }
+});
 </script>
+
+{% endblock %}

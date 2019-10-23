@@ -13,7 +13,7 @@ from securepi import app, tools
 from securepi.DetectorAPI import DetectorAPI
 from securepi.camera import VideoCamera
 from flask import Response
-from securepi.models import User, Email, Records
+from securepi.models import User, Records
 from securepi import db
 import imageio
 
