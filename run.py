@@ -9,7 +9,8 @@ import numpy as np
 from datetime import datetime
 from threading import Timer
 from picamera import PiCamera
-from securepi import app, tools
+from securepi import app
+from securepi import tools
 from securepi.DetectorAPI import DetectorAPI
 from securepi.camera import VideoCamera
 from flask import Response

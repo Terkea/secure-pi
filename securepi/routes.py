@@ -89,29 +89,29 @@ def login():
 
 @app.route('/delete_email/<int:id>', methods=['GET', 'POST'])
 def delete_email(id):
-    query = Email.query.get_or_404(id)
+    query = User.query.get_or_404(id)
 
     try:
         db.session.delete(query)
         db.session.commit()
-        return redirect(url_for('smtp'))
+        return redirect(url_for('accounts'))
     except:
         return 'There was a problem deleting that email'
 
 
 @app.route('/change_notification_status/<int:id>', methods=['GET', 'POST'])
 def change_notification_status(id):
-    query = Email.query.get_or_404(id)
+    query = User.query.get_or_404(id)
 
     try:
         if query.notifications == True:
             query.notifications = False
             db.session.commit()
-            return redirect(url_for('smtp'))
+            return redirect(url_for('accounts'))
         else:
             query.notifications = True
             db.session.commit()
-            return redirect(url_for('smtp'))
+            return redirect(url_for('accounts'))
     except:
         return 'There was a problem changing the notification status on that email'
 
