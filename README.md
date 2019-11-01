@@ -9,15 +9,16 @@ The way it works is that it takes pictures whenever human presence is detected i
 
 # Required materials
 To get started we gonna need some materials such as:
-1. Raspberry pi 3b+ 
-2. Camera module
-3. Power supply
+1. [Raspberry pi 3b+](https://www.ebay.co.uk/itm/123903810192)
+2. [Raspberry pi camera module](https://thepihut.com/products/raspberry-pi-camera-module?variant=758603005) *you could buy a regular one, but I highly recommend the one with night vision*
+3. [Power supply](https://thepihut.com/products/raspberry-pi-psu-eu)
 4. MicroSD Card
-5. I highly recommend you to buy weather a case which comes with a fan or at least heatsinks thus the temperatures can get high and **it could damage the board.**
+5. I highly recommend you to buy weather [a case which comes with a fan](https://www.ebay.co.uk/itm/For-Raspberry-Pi-3-Model-B-Plus-Acrylic-Case-Transparent-Box-Cover-Shell-V05/323857535501?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2060353.m2749.l2649) or at least heatsinks thus the temperatures can get high and **it could damage the board.**
+
 
 # Flashing the OS to the MicroSD card and testing the camera connexion
 
-After we gathered all the materials we can get started by putting all those pieces together and installing the operating system.
+### After we gathered all the materials we can get started by putting all those pieces together and installing the operating system.
 - First of all download the latest version of Raspbian which can be found here:
 
 ~~~
@@ -35,7 +36,7 @@ https://www.balena.io/etcher/
 ![alt text](https://raw.githubusercontent.com/Terkea/secure-pi/master/tutorial/1.png)
 
 
-**We'll perform a headless installation**
+### We'll perform a headless installation
 
 
 - Open the **card** and create two files in the **boot folder**, one called **ssh without any extension**, which will grant us ssh access later on and another one called **wpa_supplicant.conf** which will take care of the internet connection.
