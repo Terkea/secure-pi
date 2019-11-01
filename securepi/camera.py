@@ -23,7 +23,7 @@ class VideoCamera(object):
     def get_frame(self):
         frame = self.flip_if_needed(self.vs.read())
         now = datetime.now()
-        cv2.putText(frame, "Secure-PI | {}".format(now), (10, 25), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(frame, "Secure-PI | {}".format(now), (10, 25), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (100, 100, 100), 1)
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tobytes()
 
