@@ -16,7 +16,7 @@ To get started we gonna need some materials such as:
 5. I highly recommend you to buy weather [a case which comes with a fan](https://www.ebay.co.uk/itm/For-Raspberry-Pi-3-Model-B-Plus-Acrylic-Case-Transparent-Box-Cover-Shell-V05/323857535501?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2060353.m2749.l2649) or at least heatsinks thus the temperatures can get high and **it could damage the board.**
 
 
-# Flashing the OS to the MicroSD card and testing the camera connexion
+# Flashing the OS to the MicroSD card and testing the camera connetion
 
 ### After we gathered all the materials we can get started by putting all those pieces together and installing the operating system.
 - First of all download the latest version of Raspbian which can be found here:
