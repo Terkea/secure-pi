@@ -77,6 +77,7 @@ Something similar to this should show up, try to ssh all the IPs listed with dyn
 - With **putty** establish a ssh into the pi
 
 *The credentials are pi:raspberry*
+
 ![alt text](https://raw.githubusercontent.com/Terkea/secure-pi/master/tutorial/5.png)
 
 - The next step is to test the camera to see if everything is all righ, in order to do so type the following command into the terminal
