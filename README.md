@@ -119,3 +119,6 @@ sudo bash install.sh
 *Your router interface would most likely look different but the process is just the same*
 
 Now we are all set and done. Congrats, you just got yourself a security camera with artificial intelligence
+
+# Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
