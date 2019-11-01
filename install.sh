@@ -22,6 +22,7 @@ After=multi-user.target
 [Service]
 Type=idle
 ExecStart=/opt/secure-pi/start.sh
+User=pi
 
 [Install]
 WantedBy=multi-user.target
