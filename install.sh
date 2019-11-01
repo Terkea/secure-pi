@@ -29,4 +29,5 @@ WantedBy=multi-user.target
 EOM
 sudo systemctl daemon-reload
 sudo systemctl enable secure-pi.service
+sudo chmod +x /opt/secure-pi/start.sh
 echo "All set an done"
