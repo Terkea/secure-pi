@@ -3,8 +3,8 @@
 </p>
 
 # A brief introduction to Secure-PI
-Secure-PI is a raspberry pi based project powered by google TensorFlow, in other words, a security camera with human recognition based on AI detection.
-The way it works is that it takes pictures whenever human presence is detected in the camera's field of view. All the pictures have a timestamp and can be found on the web interface giving the user the ability to remotely see what is happening. Besides that, it also features a live view and an SMTP server which serves to send e-mails to the users if the IP address has changed, due to the fact that most ISP uses DHCP to randomly allocate the IP addresses and some of them change the IP's quite often, this way we provide a stable connection to the camera.
+Secure-PI is a Raspberry Pi-based project powered by Google TensorFlow, which is essentially a security camera with human identification. It operates by taking photographs whenever a human presence is detected in the camera's field of view. All of the images contain a timestamp and can be seen on the web interface, allowing the user to remotely monitor what is going on.
+Aside from that, it has a live view and an SMTP server, which serves to send e-mails to users if the IP address has changed, because most ISPs use DHCP to randomly allocate IP addresses, and some of them change the IP's rather frequently, so we can provide a stable connection to the camera.
 ![alt text](https://raw.githubusercontent.com/Terkea/secure-pi/master/tutorial/secure-pi.png)
 
 # Required materials
